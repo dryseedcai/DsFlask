@@ -1,10 +1,12 @@
-from flask import jsonify, app
+from flask import jsonify, app, Blueprint
 
 from app.api.bookapi import Book
 from helper import is_isbn_or_key
 
+# 创建蓝图
+web = Blueprint('web', __name__)
 
-@app.route('/book/search/<q>/<page>')
+@web.route('/book/search/<q>/<page>')
 def search(q, page):
     """
     q : 普通关键字 & isbn
