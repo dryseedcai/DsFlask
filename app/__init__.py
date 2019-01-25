@@ -20,6 +20,6 @@ def register_blueprint(app):
     """
     注册蓝图
     """
-    from app.web.book import web
-    app.register_blueprint(web)
+    from app.web import webBlueprint
+    app.register_blueprint(webBlueprint)
     pass
