@@ -1,5 +1,5 @@
-from httputil import HTTP
-
+from app.utils.httputil import HTTP
+from flask import current_app
 
 class Book:
     isbn_url = "http://t.yushu.im/v2/book/isbn/{}"
@@ -14,8 +14,12 @@ class Book:
         return result
 
     @classmethod
-    def search_by_keyword(cls, keyword, count=15, start=0):
-        url = cls.keyword_url.format(keyword, count, start)
+    def search_by_keyword(cls, keyword, page=1):
+        url = cls.keyword_url.format(keyword, current_app.config['PAGE_SIZE'], cls.calculate_start(page))
         # print("url : " + url)
         result = HTTP.get(url, True)
         return result
+
+    @staticmethod
+    def calculate_start(page):
+        return current_app.config['PAGE_SIZE'] * (page - 1)
