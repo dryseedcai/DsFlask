@@ -10,6 +10,7 @@ class Book:
         url = cls.isbn_url.format(isbn)
         # print("url : " + url)
         result = HTTP.get(url, True)
+
         # dict
         return result
 
