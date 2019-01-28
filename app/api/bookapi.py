@@ -6,25 +6,50 @@ class Book:
     isbn_url = "http://t.yushu.im/v2/book/isbn/{}"
     keyword_url = "http://t.yushu.im/v2/book/search?q={}&count={}&start={}"
 
-    @classmethod
-    def search_by_isbn(cls, isbn):
-        url = cls.isbn_url.format(isbn)
-        # print("url : " + url)
-        result = HTTP.get(url, True)
+    def __init__(self):
+        self.total = 0
+        self.books = []
 
-        # dict
-        return result
-
-    @classmethod
-    def search_by_keyword(cls, keyword, page=1):
-        url = cls.keyword_url.format(keyword, current_app.config['PAGE_SIZE'], cls.calculate_start(page))
-        # print("url : " + url)
+    def search_by_isbn(self, isbn):
+        """
+        通过isbn向远程服务器获取书籍信息
+        :param isbn:
+        :return:
+        """
+        url = self.isbn_url.format(isbn)
         result = HTTP.get(url, True)
-        return result
+        self.__fill_single(result)
+
+    def search_by_keyword(self, keyword, page=1):
+        """
+        通过关键字向远程服务器获取书籍信息
+        :param keyword:
+        :param page:
+        :return:
+        """
+        url = self.keyword_url.format(keyword, current_app.config['PAGE_SIZE'], self.__calculate_start(page))
+        result = HTTP.get(url, True)
+        self.__fill_collection(result)
 
     @staticmethod
-    def calculate_start(page):
+    def __calculate_start(page):
+        """
+        计算start_page
+        :return:
+        """
         return current_app.config['PAGE_SIZE'] * (page - 1)
+
+    def __fill_single(self, data):
+        if data:
+            self.total = 1
+            self.books.append(data)
+        pass
+
+    def __fill_collection(self, data):
+        if data:
+            self.total = 1
+            self.books = data['books']
+        pass
 
 
 """
