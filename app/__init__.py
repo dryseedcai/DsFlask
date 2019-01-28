@@ -13,8 +13,8 @@ def create_app():
     app.config.from_object('app.setting')
 
     # 初始化sqlalchemy
-    db.init_app(app)
-    db.create_all(app=app)
+    # db.init_app(app)
+    # db.create_all(app=app)
 
     # 注册蓝图
     register_blueprint(app)
